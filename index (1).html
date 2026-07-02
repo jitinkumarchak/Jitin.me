@@ -62,13 +62,13 @@
   }
   @keyframes blink{50%{opacity:0;}}
 
-  h1{
+  /* h1{
     font-family:var(--mono);font-weight:700;
     font-size:clamp(34px, 6vw, 54px);letter-spacing:-0.02em;
     color:var(--ink);margin-bottom:10px;
     background:linear-gradient(100deg, var(--ink) 55%, var(--amber) 100%);
     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-  }
+  } */
 
   .role{font-size:16px;color:var(--ink-dim);max-width:540px;margin-bottom:28px;}
   .role b{color:var(--ink);font-weight:600;}
@@ -175,6 +175,30 @@
     html{scroll-behavior:auto;}
     .reveal{opacity:1;transform:none;transition:none;}
   }
+
+ #typed-greeting{
+    color: var(--amber);
+    position: relative;
+    display: inline-block;
+    /* min-width: 180px; */
+}
+
+#typed-greeting::after{
+    content: "";
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    margin-left: 4px;
+    background: var(--amber);
+    animation: blinkCursor .8s infinite;
+    vertical-align: text-bottom;
+}
+
+@keyframes blinkCursor{
+    50%{
+        opacity:0;
+    }
+}
 </style>
 </head>
 <body>
@@ -184,7 +208,9 @@
 <div class="wrap">
   <header>
     <div class="prompt-line">~/jitin<span class="cursor"></span></div>
-    <h1>hey, i'm jitin.</h1>
+    <h1>
+  <span id="typed-greeting"></span>, i'm jitin.
+</h1>
     <p class="role">Software Engineer specializing in <b>full-stack development</b> — React, Node.js, PostgreSQL — with 250+ DSA problems solved and production systems shipped for real users.</p>
     <div class="meta-row">
       <span>Gurugram, IN</span>
@@ -254,7 +280,7 @@
           </ul>
         </div>
         <div class="proj-stack">Node.js · Express.js · MongoDB · MySQL</div>
-        <div class="proj-links"><a href="#" target="_blank" rel="noopener">GITHUB ↗</a></div>
+        <div class="proj-links"><a href="https://github.com/jitinkumarchak/PulseNet" target="_blank" rel="noopener">GITHUB ↗</a></div>
       </div>
 
       <div class="proj">
@@ -262,7 +288,7 @@
         <div class="proj-tag">SHIPPED</div>
         <div class="proj-desc">Analytics dashboard with Chart.js visualizations across 5 transaction categories, hitting sub-200ms render times via lazy-loaded modules.</div>
         <div class="proj-stack">React.js · JavaScript · Tailwind CSS · Chart.js</div>
-        <div class="proj-links"><a href="#" target="_blank" rel="noopener">LIVE ↗</a><a href="#" target="_blank" rel="noopener">GITHUB ↗</a></div>
+        <div class="proj-links"><a href="https://fintrak-beryl.vercel.app/" target="_blank" rel="noopener">LIVE ↗</a><a href="https://github.com/jitinkumarchak/Finance-Dashboard-UI.git" target="_blank" rel="noopener">GITHUB ↗</a></div>
       </div>
 
       <div class="proj">
@@ -270,7 +296,7 @@
         <div class="proj-tag">SHIPPED</div>
         <div class="proj-desc">Modular SPA consuming the TMDB API, serving 10,000+ titles with debounced search, lazy loading, and dynamic filtering.</div>
         <div class="proj-stack">React.js · Vite · Tailwind CSS · TMDB API</div>
-        <div class="proj-links"><a href="#" target="_blank" rel="noopener">LIVE ↗</a><a href="#" target="_blank" rel="noopener">GITHUB ↗</a></div>
+        <div class="proj-links"><a href="https://streamverse-one.vercel.app/" target="_blank" rel="noopener">LIVE ↗</a><a href="https://github.com/jitinkumarchak/Movie_react_app" target="_blank" rel="noopener">GITHUB ↗</a></div>
       </div>
 
     </div>
@@ -312,6 +338,66 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: 0.12 });
   revealEls.forEach(el => io.observe(el));
+
+  const greetings = [
+    "Hello",
+    "Hola",
+    "Ciao",
+    "नमस्ते",
+    "नमस्कार"
+];
+
+const el = document.getElementById("typed-greeting");
+
+let wordIndex = 0;
+let charIndex = 0;
+let deleting = false;
+
+const typingSpeed = 90;
+const deletingSpeed = 45;
+const pauseAfterTyping = 1700;
+const pauseBeforeTyping = 400;
+
+function typeEffect() {
+
+    const current = greetings[wordIndex];
+
+    if (!deleting) {
+
+        el.textContent = current.substring(0, charIndex + 1);
+        charIndex++;
+
+        if (charIndex === current.length) {
+
+            deleting = true;
+
+            setTimeout(typeEffect, pauseAfterTyping);
+            return;
+        }
+
+        setTimeout(typeEffect, typingSpeed);
+
+    } else {
+
+        el.textContent = current.substring(0, charIndex - 1);
+        charIndex--;
+
+        if (charIndex === 0) {
+
+            deleting = false;
+            wordIndex = (wordIndex + 1) % greetings.length;
+
+            setTimeout(typeEffect, pauseBeforeTyping);
+            return;
+        }
+
+        setTimeout(typeEffect, deletingSpeed);
+    }
+
+}
+
+typeEffect();
+
 </script>
 
 </body>
